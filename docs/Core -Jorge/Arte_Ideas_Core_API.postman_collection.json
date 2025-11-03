@@ -1,0 +1,901 @@
+{
+	"info": {
+		"_postman_id": "arte-ideas-core-api",
+		"name": "Arte Ideas Core API",
+		"description": "Colección completa de endpoints para el Core App de Arte Ideas - Módulos Mi Perfil y Configuración",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "🔐 Autenticación",
+			"item": [
+				{
+					"name": "Login JWT",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin_a\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/auth/login/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"auth",
+								"login",
+								""
+							]
+						},
+						"description": "Login con credenciales de usuario para obtener tokens JWT"
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/auth/refresh/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"auth",
+								"refresh",
+								""
+							]
+						},
+						"description": "Renovar access token usando refresh token"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/auth/logout/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"auth",
+								"logout",
+								""
+							]
+						},
+						"description": "Cerrar sesión del usuario e invalidar tokens"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "👤 Mi Perfil",
+			"item": [
+				{
+					"name": "Ver Mi Perfil",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/profile/view/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"profile",
+								"view",
+								""
+							]
+						},
+						"description": "Obtener información completa del perfil del usuario autenticado"
+					},
+					"response": []
+				},
+				{
+					"name": "Editar Mi Perfil",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"first_name\": \"Administrador\",\n  \"last_name\": \"Actualizado\",\n  \"phone\": \"999888777\",\n  \"address\": \"Nueva dirección, Lima, Perú\",\n  \"bio\": \"Administrador del estudio fotográfico con 5 años de experiencia\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/profile/edit/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"profile",
+								"edit",
+								""
+							]
+						},
+						"description": "Actualizar información personal del perfil"
+					},
+					"response": []
+				},
+				{
+					"name": "Estadísticas Mensuales",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/profile/statistics/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"profile",
+								"statistics",
+								""
+							]
+						},
+						"description": "Obtener estadísticas mensuales del usuario (pedidos, clientes, sesiones, horas)"
+					},
+					"response": []
+				},
+				{
+					"name": "Actividad Reciente",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/profile/activity/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"profile",
+								"activity",
+								""
+							]
+						},
+						"description": "Obtener lista de actividad reciente del usuario"
+					},
+					"response": []
+				},
+				{
+					"name": "Porcentaje de Completitud",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/profile/completion/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"profile",
+								"completion",
+								""
+							]
+						},
+						"description": "Obtener porcentaje de completitud del perfil"
+					},
+					"response": []
+				},
+				{
+					"name": "Cambiar Contraseña",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"current_password\": \"admin123\",\n  \"new_password\": \"nuevaPassword123!\",\n  \"confirm_password\": \"nuevaPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/profile/change-password/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"profile",
+								"change-password",
+								""
+							]
+						},
+						"description": "Cambiar contraseña del usuario autenticado"
+					},
+					"response": []
+				},
+				{
+					"name": "Cambiar Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"new_email\": \"nuevo.email@tenant-a.com\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/profile/change-email/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"profile",
+								"change-email",
+								""
+							]
+						},
+						"description": "Cambiar email del usuario autenticado"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "⚙️ Configuración - Negocio",
+			"item": [
+				{
+					"name": "Ver Configuración del Negocio",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/business/view/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"business",
+								"view",
+								""
+							]
+						},
+						"description": "Ver configuración del negocio (Solo Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Editar Configuración del Negocio",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"business_name\": \"Arte Ideas Diseño Gráfico A - Actualizado\",\n  \"business_address\": \"Av. Lima 456, San Juan de Lurigancho, Lima\",\n  \"business_phone\": \"987654322\",\n  \"business_email\": \"contacto@tenant-a.com\",\n  \"business_ruc\": \"20123456789\",\n  \"currency\": \"PEN\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/config/business/edit/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"business",
+								"edit",
+								""
+							]
+						},
+						"description": "Editar configuración del negocio (Solo Admin)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "👥 Configuración - Usuarios",
+			"item": [
+				{
+					"name": "Lista de Usuarios",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/users/list/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"users",
+								"list",
+								""
+							]
+						},
+						"description": "Lista de usuarios del tenant (Solo Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Usuario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"fotografo_a\",\n  \"email\": \"fotografo@tenant-a.com\",\n  \"first_name\": \"Juan\",\n  \"last_name\": \"Fotógrafo\",\n  \"role\": \"photographer\",\n  \"phone\": \"987654324\",\n  \"password\": \"fotografo123\",\n  \"confirm_password\": \"fotografo123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/config/users/create/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"users",
+								"create",
+								""
+							]
+						},
+						"description": "Crear nuevo usuario (Solo Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Ver Usuario Específico",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/users/{{user_id}}/view/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"users",
+								"{{user_id}}",
+								"view",
+								""
+							]
+						},
+						"description": "Ver usuario específico (Solo Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Editar Usuario",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"first_name\": \"Usuario\",\n  \"last_name\": \"Actualizado\",\n  \"email\": \"usuario.actualizado@tenant-a.com\",\n  \"role\": \"manager\",\n  \"phone\": \"999888777\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/config/users/{{user_id}}/edit/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"users",
+								"{{user_id}}",
+								"edit",
+								""
+							]
+						},
+						"description": "Editar usuario (Solo Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Activar/Desactivar Usuario",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/users/{{user_id}}/toggle/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"users",
+								"{{user_id}}",
+								"toggle",
+								""
+							]
+						},
+						"description": "Activar/Desactivar usuario (Solo Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Usuario",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/users/{{user_id}}/delete/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"users",
+								"{{user_id}}",
+								"delete",
+								""
+							]
+						},
+						"description": "Eliminar usuario (Solo Admin)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🔐 Configuración - Roles y Permisos",
+			"item": [
+				{
+					"name": "Lista de Roles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/roles/list/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"roles",
+								"list",
+								""
+							]
+						},
+						"description": "Lista de roles disponibles (Solo Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Ver Permisos de Rol",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/permissions/{{role_code}}/view/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"permissions",
+								"{{role_code}}",
+								"view",
+								""
+							]
+						},
+						"description": "Ver permisos de un rol específico (Solo Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Editar Permisos de Rol",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"access_dashboard\": true,\n  \"access_agenda\": false,\n  \"access_pedidos\": true,\n  \"access_clientes\": true,\n  \"access_inventario\": true,\n  \"access_activos\": false,\n  \"access_gastos\": false,\n  \"access_produccion\": true,\n  \"access_contratos\": false,\n  \"access_reportes\": false,\n  \"view_costos\": false,\n  \"view_precios\": false,\n  \"view_margenes\": false,\n  \"view_datos_clientes\": true,\n  \"view_datos_financieros\": false,\n  \"edit_precios\": false,\n  \"delete_registros\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/config/permissions/{{role_code}}/edit/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"permissions",
+								"{{role_code}}",
+								"edit",
+								""
+							]
+						},
+						"description": "Editar permisos de un rol (Solo Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Restablecer Permisos por Defecto",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/permissions/{{role_code}}/reset/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"permissions",
+								"{{role_code}}",
+								"reset",
+								""
+							]
+						},
+						"description": "Restablecer permisos por defecto de un rol (Solo Admin)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🏢 Super Admin - Tenants",
+			"item": [
+				{
+					"name": "Lista de Tenants",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{superadmin_access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/tenants/list/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"tenants",
+								"list",
+								""
+							]
+						},
+						"description": "Lista de todos los tenants (Solo Super Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Tenant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{superadmin_access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Estudio Fotográfico C\",\n  \"business_name\": \"Arte Ideas Diseño Gráfico C\",\n  \"business_address\": \"Av. Arequipa 789, Arequipa\",\n  \"business_phone\": \"987654326\",\n  \"business_email\": \"info@tenant-c.com\",\n  \"business_ruc\": \"20555666777\",\n  \"currency\": \"PEN\",\n  \"location_type\": \"provincia\",\n  \"max_users\": 15\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/config/tenants/create/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"tenants",
+								"create",
+								""
+							]
+						},
+						"description": "Crear nuevo tenant (Solo Super Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Usuarios de Tenant",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{superadmin_access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/tenants/{{tenant_id}}/users/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"tenants",
+								"{{tenant_id}}",
+								"users",
+								""
+							]
+						},
+						"description": "Usuarios de un tenant específico (Solo Super Admin)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🏥 Health Check",
+			"item": [
+				{
+					"name": "Health Check Sistema",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/core/health/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"health",
+								""
+							]
+						},
+						"description": "Health check del sistema (No requiere autenticación)"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refresh_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "superadmin_access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "3",
+			"type": "string"
+		},
+		{
+			"key": "tenant_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "role_code",
+			"value": "employee",
+			"type": "string"
+		}
+	]
+}
