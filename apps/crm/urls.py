@@ -2,14 +2,12 @@
 URLs del CRM App - Arte Ideas
 """
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
 
 app_name = 'crm'
 
-# Router para ViewSets
-router = DefaultRouter()
-
 urlpatterns = [
-    # API Router
-    path('', include(router.urls)),
+    # Submódulo Clientes
+    path('clients/', include('apps.crm.clientes.urls')),
+    # Submódulo Contratos
+    path('contracts/', include('apps.crm.contracts.urls')),
 ]
