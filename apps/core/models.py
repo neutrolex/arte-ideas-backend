@@ -83,10 +83,9 @@ class User(AbstractUser):
     ROLE_CHOICES = [
         ('super_admin', 'Super Administrador'),  # Ve todos los tenants
         ('admin', 'Administrador'),              # Admin del tenant
-        ('manager', 'Gerente'),                  # Gerente del tenant
-        ('employee', 'Empleado'),                # Empleado del tenant
-        ('photographer', 'Fotógrafo'),           # Fotógrafo del tenant
-        ('assistant', 'Asistente'),              # Asistente del tenant
+        ('ventas', 'Ventas'),                    # Usuario de ventas
+        ('produccion', 'Producción'),            # Usuario de producción
+        ('operario', 'Operario'),                # Usuario operario
     ]
     
     id = models.AutoField(primary_key=True)
@@ -106,7 +105,7 @@ class User(AbstractUser):
     role = models.CharField(
         max_length=20, 
         choices=ROLE_CHOICES, 
-        default='employee',
+        default='operario',
         verbose_name='Rol'
     )
     
@@ -157,30 +156,24 @@ class User(AbstractUser):
                 # Gestión dentro del tenant
                 'manage:users', 'manage:permissions'
             ],
-            'manager': [
-                # Acceso a módulos (la mayoría)
+            'ventas': [
+                # Acceso a módulos de ventas
                 'access:dashboard', 'access:agenda', 'access:pedidos', 'access:clientes',
-                'access:inventario', 'access:activos', 'access:produccion',
                 'access:contratos', 'access:reportes',
-                # Algunas acciones sensibles
-                'view:margenes', 'view:datos_clientes', 'edit:precios'
+                # Acciones específicas de ventas
+                'view:datos_clientes', 'view:precios'
             ],
-            'employee': [
-                # Acceso básico a módulos
-                'access:dashboard', 'access:pedidos', 'access:clientes',
-                'access:inventario', 'access:produccion',
-                # Sin acciones sensibles
+            'produccion': [
+                # Acceso a módulos de producción
+                'access:dashboard', 'access:produccion', 'access:inventario', 'access:activos',
+                'access:pedidos', 'access:reportes',
+                # Acciones específicas de producción
+                'view:costos', 'view:inventario'
             ],
-            'photographer': [
-                # Acceso específico para fotógrafos
-                'access:dashboard', 'access:agenda', 'access:pedidos', 'access:clientes',
-                'access:produccion',
-                # Sin acciones sensibles financieras
-            ],
-            'assistant': [
-                # Acceso mínimo
-                'access:dashboard', 'access:agenda', 'access:clientes',
-                # Sin acciones sensibles
+            'operario': [
+                # Acceso básico operacional
+                'access:dashboard', 'access:agenda', 'access:produccion',
+                # Solo acceso de visualización básica
             ]
         }
         
@@ -400,22 +393,18 @@ class RolePermission(models.Model):
                 'view_margenes': True, 'view_datos_clientes': True, 'view_datos_financieros': True,
                 'edit_precios': True, 'delete_registros': True
             },
-            'manager': {
+            'ventas': {
                 'access_dashboard': True, 'access_agenda': True, 'access_pedidos': True,
-                'access_clientes': True, 'access_inventario': True, 'access_activos': True,
-                'access_produccion': True, 'access_contratos': True, 'access_reportes': True,
-                'view_margenes': True, 'view_datos_clientes': True, 'edit_precios': True
+                'access_clientes': True, 'access_contratos': True, 'access_reportes': True,
+                'view_datos_clientes': True, 'view_precios': True
             },
-            'employee': {
-                'access_dashboard': True, 'access_pedidos': True, 'access_clientes': True,
-                'access_inventario': True, 'access_produccion': True
+            'produccion': {
+                'access_dashboard': True, 'access_produccion': True, 'access_inventario': True,
+                'access_activos': True, 'access_pedidos': True, 'access_reportes': True,
+                'view_costos': True
             },
-            'photographer': {
-                'access_dashboard': True, 'access_agenda': True, 'access_pedidos': True,
-                'access_clientes': True, 'access_produccion': True
-            },
-            'assistant': {
-                'access_dashboard': True, 'access_agenda': True, 'access_clientes': True
+            'operario': {
+                'access_dashboard': True, 'access_agenda': True, 'access_produccion': True
             }
         }
         return defaults.get(role, {})
