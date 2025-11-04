@@ -507,7 +507,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"first_name\": \"Usuario\",\n  \"last_name\": \"Actualizado\",\n  \"email\": \"usuario.actualizado@tenant-a.com\",\n  \"role\": \"manager\",\n  \"phone\": \"999888777\"\n}"
+							"raw": "{\n  \"first_name\": \"Usuario\",\n  \"last_name\": \"Actualizado\",\n  \"email\": \"usuario.actualizado@tenant-a.com\",\n  \"role\": \"ventas\",\n  \"phone\": \"999888777\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/core/config/users/{{user_id}}/edit/",
@@ -713,6 +713,201 @@
 						"description": "Restablecer permisos por defecto de un rol (Solo Admin)"
 					},
 					"response": []
+				},
+				{
+					"name": "Ver Permisos - Rol Ventas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/permissions/ventas/view/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"permissions",
+								"ventas",
+								"view",
+								""
+							]
+						},
+						"description": "Ver permisos específicos del rol Ventas (HU01)"
+					},
+					"response": []
+				},
+				{
+					"name": "Ver Permisos - Rol Producción",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/permissions/produccion/view/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"permissions",
+								"produccion",
+								"view",
+								""
+							]
+						},
+						"description": "Ver permisos específicos del rol Producción (HU01)"
+					},
+					"response": []
+				},
+				{
+					"name": "Ver Permisos - Rol Operario",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/core/config/permissions/operario/view/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"permissions",
+								"operario",
+								"view",
+								""
+							]
+						},
+						"description": "Ver permisos específicos del rol Operario (HU01)"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Usuario - Rol Ventas",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"vendedor_test\",\n  \"email\": \"vendedor@empresa.com\",\n  \"first_name\": \"Juan\",\n  \"last_name\": \"Vendedor\",\n  \"role\": \"ventas\",\n  \"password\": \"password123\",\n  \"confirm_password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/config/users/create/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"users",
+								"create",
+								""
+							]
+						},
+						"description": "Crear usuario con rol Ventas (HU01)"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Usuario - Rol Producción",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"productor_test\",\n  \"email\": \"produccion@empresa.com\",\n  \"first_name\": \"María\",\n  \"last_name\": \"Productora\",\n  \"role\": \"produccion\",\n  \"password\": \"password123\",\n  \"confirm_password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/config/users/create/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"users",
+								"create",
+								""
+							]
+						},
+						"description": "Crear usuario con rol Producción (HU01)"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Usuario - Rol Operario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"operario_test\",\n  \"email\": \"operario@empresa.com\",\n  \"first_name\": \"Carlos\",\n  \"last_name\": \"Operario\",\n  \"role\": \"operario\",\n  \"password\": \"password123\",\n  \"confirm_password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/core/config/users/create/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"core",
+								"config",
+								"users",
+								"create",
+								""
+							]
+						},
+						"description": "Crear usuario con rol Operario (HU01)"
+					},
+					"response": []
 				}
 			]
 		},
@@ -894,7 +1089,7 @@
 		},
 		{
 			"key": "role_code",
-			"value": "employee",
+			"value": "ventas",
 			"type": "string"
 		}
 	]

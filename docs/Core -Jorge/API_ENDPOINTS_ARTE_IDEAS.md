@@ -1091,23 +1091,21 @@ Todas las APIs siguen el patrón: `/api/core/[modulo]/[accion]/`
     "name": "Administrador"
   },
   {
-    "code": "manager",
-    "name": "Gerente"
+    "code": "ventas",
+    "name": "Ventas"
   },
   {
-    "code": "employee",
-    "name": "Empleado"
+    "code": "produccion",
+    "name": "Producción"
   },
   {
-    "code": "photographer",
-    "name": "Fotógrafo"
-  },
-  {
-    "code": "assistant",
-    "name": "Asistente"
+    "code": "operario",
+    "name": "Operario"
   }
 ]
 ```
+
+**Nota:** El rol `super_admin` no aparece en la lista ya que está filtrado para usuarios normales.
 
 **Ver Permisos de un Rol:**
 - **Método:** GET
@@ -1144,9 +1142,114 @@ Todas las APIs siguen el patrón: `/api/core/[modulo]/[accion]/`
 }
 ```
 
+**Ver Permisos del Rol Ventas:**
+- **Método:** GET
+- **URL:** `{{base_url}}/api/core/config/permissions/ventas/view/`
+- **Headers:**
+  ```
+  Authorization: Bearer <access_token>
+  ```
+
+**Respuesta Exitosa:**
+```json
+{
+  "role": "ventas",
+  "role_display": "Ventas",
+  "modules_count": 6,
+  "sensitive_actions_count": 2,
+  "access_dashboard": true,
+  "access_agenda": true,
+  "access_pedidos": true,
+  "access_clientes": true,
+  "access_inventario": false,
+  "access_activos": false,
+  "access_gastos": false,
+  "access_produccion": false,
+  "access_contratos": true,
+  "access_reportes": true,
+  "view_costos": false,
+  "view_precios": true,
+  "view_margenes": false,
+  "view_datos_clientes": true,
+  "view_datos_financieros": false,
+  "edit_precios": false,
+  "delete_registros": false
+}
+```
+
+**Ver Permisos del Rol Producción:**
+- **Método:** GET
+- **URL:** `{{base_url}}/api/core/config/permissions/produccion/view/`
+- **Headers:**
+  ```
+  Authorization: Bearer <access_token>
+  ```
+
+**Respuesta Exitosa:**
+```json
+{
+  "role": "produccion",
+  "role_display": "Producción",
+  "modules_count": 6,
+  "sensitive_actions_count": 1,
+  "access_dashboard": true,
+  "access_agenda": false,
+  "access_pedidos": true,
+  "access_clientes": false,
+  "access_inventario": true,
+  "access_activos": true,
+  "access_gastos": false,
+  "access_produccion": true,
+  "access_contratos": false,
+  "access_reportes": true,
+  "view_costos": true,
+  "view_precios": false,
+  "view_margenes": false,
+  "view_datos_clientes": false,
+  "view_datos_financieros": false,
+  "edit_precios": false,
+  "delete_registros": false
+}
+```
+
+**Ver Permisos del Rol Operario:**
+- **Método:** GET
+- **URL:** `{{base_url}}/api/core/config/permissions/operario/view/`
+- **Headers:**
+  ```
+  Authorization: Bearer <access_token>
+  ```
+
+**Respuesta Exitosa:**
+```json
+{
+  "role": "operario",
+  "role_display": "Operario",
+  "modules_count": 3,
+  "sensitive_actions_count": 0,
+  "access_dashboard": true,
+  "access_agenda": true,
+  "access_pedidos": false,
+  "access_clientes": false,
+  "access_inventario": false,
+  "access_activos": false,
+  "access_gastos": false,
+  "access_produccion": true,
+  "access_contratos": false,
+  "access_reportes": false,
+  "view_costos": false,
+  "view_precios": false,
+  "view_margenes": false,
+  "view_datos_clientes": false,
+  "view_datos_financieros": false,
+  "edit_precios": false,
+  "delete_registros": false
+}
+```
+
 **Editar Permisos de un Rol:**
 - **Método:** PUT
-- **URL:** `{{base_url}}/api/core/config/permissions/employee/edit/`
+- **URL:** `{{base_url}}/api/core/config/permissions/ventas/edit/`
 - **Headers:**
   ```
   Authorization: Bearer <access_token>
@@ -1156,17 +1259,17 @@ Todas las APIs siguen el patrón: `/api/core/[modulo]/[accion]/`
   ```json
   {
     "access_dashboard": true,
-    "access_agenda": false,
+    "access_agenda": true,
     "access_pedidos": true,
     "access_clientes": true,
-    "access_inventario": true,
+    "access_inventario": false,
     "access_activos": false,
     "access_gastos": false,
-    "access_produccion": true,
-    "access_contratos": false,
-    "access_reportes": false,
+    "access_produccion": false,
+    "access_contratos": true,
+    "access_reportes": true,
     "view_costos": false,
-    "view_precios": false,
+    "view_precios": true,
     "view_margenes": false,
     "view_datos_clientes": true,
     "view_datos_financieros": false,
@@ -1178,22 +1281,22 @@ Todas las APIs siguen el patrón: `/api/core/[modulo]/[accion]/`
 **Respuesta Exitosa:**
 ```json
 {
-  "role": "employee",
-  "role_display": "Empleado",
-  "modules_count": 5,
-  "sensitive_actions_count": 1,
+  "role": "ventas",
+  "role_display": "Ventas",
+  "modules_count": 6,
+  "sensitive_actions_count": 2,
   "access_dashboard": true,
-  "access_agenda": false,
+  "access_agenda": true,
   "access_pedidos": true,
   "access_clientes": true,
-  "access_inventario": true,
+  "access_inventario": false,
   "access_activos": false,
   "access_gastos": false,
-  "access_produccion": true,
-  "access_contratos": false,
-  "access_reportes": false,
+  "access_produccion": false,
+  "access_contratos": true,
+  "access_reportes": true,
   "view_costos": false,
-  "view_precios": false,
+  "view_precios": true,
   "view_margenes": false,
   "view_datos_clientes": true,
   "view_datos_financieros": false,
@@ -1875,13 +1978,33 @@ if (pm.response.code === 200) {
 5. PATCH /api/core/config/users/{id}/toggle/ (Activar/Desactivar)
 ```
 
-### **Flujo 2: Gestión de Permisos**
+### **Flujo 2: Gestión de Permisos con Nuevos Roles HU01**
 ```
 1. POST /api/core/auth/login/ (Login como admin)
-2. GET /api/core/config/roles/list/ (Ver roles disponibles)
-3. GET /api/core/config/permissions/{role}/view/ (Ver permisos actuales)
-4. PUT /api/core/config/permissions/{role}/edit/ (Modificar permisos)
-5. POST /api/core/config/permissions/{role}/reset/ (Restablecer si es necesario)
+2. GET /api/core/config/roles/list/ (Ver roles: admin, ventas, produccion, operario)
+3. GET /api/core/config/permissions/ventas/view/ (Ver permisos de ventas)
+4. GET /api/core/config/permissions/produccion/view/ (Ver permisos de producción)
+5. GET /api/core/config/permissions/operario/view/ (Ver permisos de operario)
+6. PUT /api/core/config/permissions/ventas/edit/ (Modificar permisos de ventas)
+7. POST /api/core/config/permissions/operario/reset/ (Restablecer permisos por defecto)
+```
+
+### **Flujo 2.1: Crear Usuario con Nuevos Roles**
+```
+1. POST /api/core/auth/login/ (Login como admin)
+2. POST /api/core/config/users/create/ (Crear usuario con rol "ventas")
+   Body: {
+     "username": "vendedor1",
+     "email": "ventas@empresa.com",
+     "first_name": "Juan",
+     "last_name": "Pérez",
+     "role": "ventas",
+     "password": "password123",
+     "confirm_password": "password123"
+   }
+3. POST /api/core/config/users/create/ (Crear usuario con rol "produccion")
+4. POST /api/core/config/users/create/ (Crear usuario con rol "operario")
+5. GET /api/core/config/users/list/ (Verificar usuarios creados)
 ```
 
 ### **Flujo 3: Configuración de Negocio**

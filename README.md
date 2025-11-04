@@ -1,6 +1,8 @@
 # 🎨 Arte Ideas - Backend Core App
-
+xdd
 Sistema multi-tenant para estudios fotográficos con gestión completa de usuarios, perfiles y configuraciones empresariales.
+
+> **🆕 Actualización HU01:** Sistema de roles actualizado según especificaciones de negocio. Nuevos roles: Admin, Ventas, Producción, Operario.
 
 ## 📋 Tabla de Contenidos
 
@@ -35,7 +37,7 @@ Sistema multi-tenant para estudios fotográficos con gestión completa de usuari
 | Característica | Descripción |
 |----------------|-------------|
 | **Multi-Tenant** | Aislamiento completo de datos por estudio fotográfico |
-| **Roles Granulares** | 6 roles: Super Admin, Admin, Manager, Employee, Photographer, Assistant |
+| **Roles Granulares** | 5 roles HU01: Super Admin, Admin, Ventas, Producción, Operario |
 | **JWT Authentication** | Tokens seguros con expiración y refresh automático |
 | **Perfiles Dinámicos** | Gestión personal con estadísticas y actividad |
 | **Configuración Flexible** | Configuración empresarial independiente por tenant |
@@ -225,13 +227,12 @@ class User(AbstractUser):
     bio = models.TextField(blank=True)
 ```
 
-**Roles Disponibles:**
+**Roles Disponibles (HU01):**
 - `super_admin`: Acceso completo a todos los tenants
-- `admin`: Gestión completa dentro de su tenant
-- `manager`: Acceso limitado según configuración
-- `employee`: Acceso básico a módulos operativos
-- `photographer`: Acceso específico para fotógrafos
-- `assistant`: Acceso mínimo de asistencia
+- `admin`: Gestión completa dentro de su tenant (Administrador)
+- `ventas`: Acceso a módulos de ventas (Clientes, Pedidos, Agenda, Contratos)
+- `produccion`: Acceso a módulos de producción (Producción, Inventario, Activos)
+- `operario`: Acceso básico operacional (Dashboard, Agenda, Producción - solo vista)
 
 ### 👤 UserProfile (Perfil Extendido)
 
@@ -347,12 +348,17 @@ PATCH  /api/core/config/users/{id}/toggle/    # Activar/Desactivar usuario
 DELETE /api/core/config/users/{id}/delete/    # Eliminar usuario
 ```
 
-#### Roles y Permisos
+#### Roles y Permisos HU01
 ```http
-GET  /api/core/config/roles/list/                    # Lista de roles disponibles
-GET  /api/core/config/permissions/{role}/view/       # Ver permisos de rol
+GET  /api/core/config/roles/list/                    # Lista de roles disponibles (admin, ventas, produccion, operario)
+GET  /api/core/config/permissions/{role}/view/       # Ver permisos de rol específico
 PUT  /api/core/config/permissions/{role}/edit/       # Editar permisos de rol
 POST /api/core/config/permissions/{role}/reset/      # Restablecer permisos por defecto
+
+# Ejemplos específicos para roles HU01:
+GET  /api/core/config/permissions/ventas/view/       # Ver permisos del rol Ventas
+GET  /api/core/config/permissions/produccion/view/   # Ver permisos del rol Producción  
+GET  /api/core/config/permissions/operario/view/     # Ver permisos del rol Operario
 ```
 
 #### Super Admin - Gestión de Tenants
@@ -507,43 +513,69 @@ if request.user.role == 'super_admin':
 
 ## 👥 Roles y Permisos
 
-### 🎭 Jerarquía de Roles
+### 🎭 Jerarquía de Roles HU01
 
 ```
 Super Admin (Global)
-├── Admin (Tenant)
-│   ├── Manager (Tenant)
-│   ├── Employee (Tenant)
-│   ├── Photographer (Tenant)
-│   └── Assistant (Tenant)
+├── Admin (Tenant) - Administrador completo
+├── Ventas (Tenant) - Gestión comercial y clientes
+├── Producción (Tenant) - Gestión de producción e inventario
+└── Operario (Tenant) - Acceso básico operacional
 ```
 
-### 📋 Matriz de Permisos
+### 📋 Matriz de Permisos HU01
 
-| Módulo | Super Admin | Admin | Manager | Employee | Photographer | Assistant |
-|--------|-------------|-------|---------|----------|--------------|-----------|
-| Dashboard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Agenda | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
-| Pedidos | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Clientes | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Inventario | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Activos | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Gastos | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Producción | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Contratos | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Reportes | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Módulo | Super Admin | Admin | Ventas | Producción | Operario |
+|--------|-------------|-------|--------|------------|----------|
+| Dashboard | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Agenda | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Pedidos | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Clientes | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Inventario | ✅ | ✅ | ❌ | ✅ | ❌ |
+| Activos | ✅ | ✅ | ❌ | ✅ | ❌ |
+| Gastos | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Producción | ✅ | ✅ | ❌ | ✅ | ✅ |
+| Contratos | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Reportes | ✅ | ✅ | ✅ | ✅ | ❌ |
 
-### 🔐 Acciones Sensibles
+### 🔐 Acciones Sensibles HU01
 
-| Acción | Super Admin | Admin | Manager | Employee | Photographer | Assistant |
-|--------|-------------|-------|---------|----------|--------------|-----------|
-| Ver Costos | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Ver Precios | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Ver Márgenes | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Ver Datos Clientes | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Ver Datos Financieros | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Editar Precios | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Eliminar Registros | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Acción | Super Admin | Admin | Ventas | Producción | Operario |
+|--------|-------------|-------|--------|------------|----------|
+| Ver Costos | ✅ | ✅ | ❌ | ✅ | ❌ |
+| Ver Precios | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Ver Márgenes | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Ver Datos Clientes | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Ver Datos Financieros | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Editar Precios | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Eliminar Registros | ✅ | ✅ | ❌ | ❌ | ❌ |
+
+### 🎯 Descripción de Roles HU01
+
+**🔴 Super Admin:**
+- Acceso completo a todos los tenants
+- Gestión de tenants y usuarios globales
+- Todas las acciones sensibles habilitadas
+
+**🟠 Admin (Administrador):**
+- Gestión completa dentro de su tenant
+- Acceso a todos los módulos y configuraciones
+- Gestión de usuarios y permisos del tenant
+
+**🟡 Ventas:**
+- Enfoque en gestión comercial y relación con clientes
+- Acceso a: Dashboard, Agenda, Pedidos, Clientes, Contratos, Reportes
+- Puede ver precios y datos de clientes
+
+**🟢 Producción:**
+- Enfoque en operaciones de producción e inventario
+- Acceso a: Dashboard, Producción, Inventario, Activos, Pedidos, Reportes
+- Puede ver costos de materiales y producción
+
+**🔵 Operario:**
+- Acceso básico para tareas operacionales
+- Acceso a: Dashboard, Agenda, Producción (solo vista)
+- Sin acceso a información financiera o administrativa
 
 ---
 
@@ -572,7 +604,7 @@ Super Admin (Global)
    Authorization: Bearer <token>
    ```
 
-### 🔧 Flujo de Administrador
+### 🔧 Flujo de Administrador HU01
 
 1. **Configurar Negocio:**
    ```http
@@ -583,22 +615,51 @@ Super Admin (Global)
    }
    ```
 
-2. **Crear Usuario:**
+2. **Crear Usuario con Rol Ventas:**
    ```http
    POST /api/core/config/users/create/
    {
-     "username": "nuevo_fotografo",
-     "email": "fotografo@miestudio.com",
-     "role": "photographer"
+     "username": "vendedor1",
+     "email": "ventas@empresa.com",
+     "first_name": "Juan",
+     "last_name": "Vendedor", 
+     "role": "ventas",
+     "password": "password123",
+     "confirm_password": "password123"
    }
    ```
 
-3. **Configurar Permisos:**
+3. **Crear Usuario con Rol Producción:**
    ```http
-   PUT /api/core/config/permissions/photographer/edit/
+   POST /api/core/config/users/create/
    {
-     "access_produccion": true,
-     "access_clientes": true
+     "username": "productor1",
+     "email": "produccion@empresa.com",
+     "first_name": "María",
+     "last_name": "Productora",
+     "role": "produccion", 
+     "password": "password123",
+     "confirm_password": "password123"
+   }
+   ```
+
+4. **Verificar Permisos de Rol:**
+   ```http
+   GET /api/core/config/permissions/ventas/view/
+   GET /api/core/config/permissions/produccion/view/
+   GET /api/core/config/permissions/operario/view/
+   ```
+
+5. **Configurar Permisos Personalizados:**
+   ```http
+   PUT /api/core/config/permissions/ventas/edit/
+   {
+     "access_dashboard": true,
+     "access_clientes": true,
+     "access_pedidos": true,
+     "access_contratos": true,
+     "view_precios": true,
+     "view_datos_clientes": true
    }
    ```
 
