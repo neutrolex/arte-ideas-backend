@@ -1,5 +1,5 @@
 # 🎨 Arte Ideas - Backend Core App
-
+xdd
 Sistema multi-tenant para estudios fotográficos con gestión completa de usuarios, perfiles y configuraciones empresariales.
 
 > **🆕 Actualización HU01:** Sistema de roles actualizado según especificaciones de negocio. Nuevos roles: Admin, Ventas, Producción, Operario.
