@@ -10,4 +10,6 @@ urlpatterns = [
     path('clients/', include('apps.crm.clientes.urls')),
     # Submódulo Contratos
     path('contracts/', include('apps.crm.contracts.urls')),
+    # Submódulo Agenda
+    path('agenda/', include('apps.crm.agenda.urls')),
 ]
