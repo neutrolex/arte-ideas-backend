@@ -39,7 +39,7 @@ class TenantConfigurationSerializer(serializers.ModelSerializer):
 
 class RolePermissionSerializer(serializers.ModelSerializer):
     """Serializer para permisos por rol"""
-    role_display = serializers.CharField(source='get_role_display', read_only=True)
+    role_display = serializers.SerializerMethodField()
     modules_count = serializers.SerializerMethodField()
     sensitive_actions_count = serializers.SerializerMethodField()
     
@@ -55,6 +55,13 @@ class RolePermissionSerializer(serializers.ModelSerializer):
             'view_costos', 'view_precios', 'view_margenes', 'view_datos_clientes',
             'view_datos_financieros', 'edit_precios', 'delete_registros'
         ]
+    
+    def get_role_display(self, obj):
+        """Obtener el nombre del rol"""
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        role_dict = dict(User.ROLE_CHOICES)
+        return role_dict.get(obj.role, obj.role)
     
     def get_modules_count(self, obj):
         """Contar módulos con acceso"""

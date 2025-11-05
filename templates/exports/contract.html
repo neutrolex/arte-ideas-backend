@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato - {{ contract.title }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        h1 { font-size: 18px; margin-bottom: 4px; }
+        .section { margin: 12px 0; }
+        .label { font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { border: 1px solid #ddd; padding: 6px; }
+    </style>
+    </head>
+<body>
+    <h1>Contrato: {{ contract.title }}</h1>
+    <div class="section">
+        <div><span class="label">Cliente:</span> {{ contract.client_name|default:contract.client }}</div>
+        <div><span class="label">Tipo:</span> {{ contract.get_contract_type_display }}</div>
+        <div><span class="label">Estado:</span> {{ contract.get_status_display }}</div>
+        <div><span class="label">Monto:</span> S/ {{ contract.amount }}</div>
+        <div><span class="label">Fecha Inicio:</span> {{ contract.start_date }}</div>
+        {% if contract.end_date %}
+        <div><span class="label">Fecha Fin:</span> {{ contract.end_date }}</div>
+        {% endif %}
+    </div>
+
+    {% if contract.details %}
+    <div class="section">
+        <div class="label">Detalles:</div>
+        <p>{{ contract.details }}</p>
+    </div>
+    {% endif %}
+
+    <div class="section">
+        <table>
+            <tr>
+                <th>Referencia Externa</th>
+                <td>{{ contract.external_ref }}</td>
+            </tr>
+            <tr>
+                <th>Tenant</th>
+                <td>{{ contract.tenant.business_name }}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

@@ -27,17 +27,8 @@ class RolePermission(models.Model):
     """
     Permisos específicos por rol y tenant
     """
-    ROLE_CHOICES = [
-        ('super_admin', 'Super Administrador'),
-        ('admin', 'Administrador'),
-        ('manager', 'Gerente'),
-        ('employee', 'Empleado'),
-        ('photographer', 'Fotógrafo'),
-        ('assistant', 'Asistente'),
-    ]
-    
     tenant = models.ForeignKey('Tenant', on_delete=models.CASCADE, verbose_name='Tenant')
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, verbose_name='Rol')
+    role = models.CharField(max_length=20, choices=[], verbose_name='Rol')  # Se actualizará dinámicamente
     
     # Módulos con acceso
     access_dashboard = models.BooleanField(default=True, verbose_name='Dashboard')
@@ -91,22 +82,18 @@ class RolePermission(models.Model):
                 'view_margenes': True, 'view_datos_clientes': True, 'view_datos_financieros': True,
                 'edit_precios': True, 'delete_registros': True
             },
-            'manager': {
+            'ventas': {
                 'access_dashboard': True, 'access_agenda': True, 'access_pedidos': True,
-                'access_clientes': True, 'access_inventario': True, 'access_activos': True,
-                'access_produccion': True, 'access_contratos': True, 'access_reportes': True,
-                'view_margenes': True, 'view_datos_clientes': True, 'edit_precios': True
+                'access_clientes': True, 'access_contratos': True, 'access_reportes': True,
+                'view_datos_clientes': True, 'view_precios': True
             },
-            'employee': {
-                'access_dashboard': True, 'access_pedidos': True, 'access_clientes': True,
-                'access_inventario': True, 'access_produccion': True
+            'produccion': {
+                'access_dashboard': True, 'access_produccion': True, 'access_inventario': True,
+                'access_activos': True, 'access_pedidos': True, 'access_reportes': True,
+                'view_costos': True
             },
-            'photographer': {
-                'access_dashboard': True, 'access_agenda': True, 'access_pedidos': True,
-                'access_clientes': True, 'access_produccion': True
-            },
-            'assistant': {
-                'access_dashboard': True, 'access_agenda': True, 'access_clientes': True
+            'operario': {
+                'access_dashboard': True, 'access_agenda': True, 'access_produccion': True
             }
         }
         
