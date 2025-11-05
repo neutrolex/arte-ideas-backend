@@ -12,4 +12,6 @@ router = DefaultRouter()
 urlpatterns = [
     # API Router
     path('', include(router.urls)),
+    # Inventario Module
+    path('inventario/', include('apps.commerce.inventario.urls')),
 ]
