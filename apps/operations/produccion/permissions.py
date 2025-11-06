@@ -10,7 +10,7 @@ class IsSameInquilino(permissions.BasePermission):
             return True
         
         # Verificar que el usuario pertenezca al mismo inquilino que el objeto
-        return obj.id_inquilino == request.user.id_inquilino
+        return obj.id_inquilino == request.user.tenant
 
 # Mantener alias para compatibilidad
 IsSameInmobiliaria = IsSameInquilino
