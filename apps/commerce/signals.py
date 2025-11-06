@@ -10,7 +10,10 @@ from datetime import datetime, timedelta
 from django.core.mail import send_mail
 from django.conf import settings
 
-from .models import Order, OrderItem, Product
+# Importar desde módulos específicos
+from .pedidos.models import Order, OrderItem, OrderPayment
+from .inventario.models import BaseInventarioModel
+from .models import Product  # Mantener Product para compatibilidad
 
 logger = logging.getLogger(__name__)
 
@@ -40,12 +43,12 @@ def update_order_status_based_on_dates(sender, instance, **kwargs):
     today = timezone.now().date()
     
     # Solo actualizar si el pedido no está completado ni cancelado
-    if instance.status not in ['completed', 'cancelled']:
+    if instance.status not in ['completado', 'cancelado']:
         if instance.delivery_date and instance.delivery_date < today:
-            instance.status = 'delayed'
-        elif instance.status == 'delayed' and instance.delivery_date and instance.delivery_date >= today:
+            instance.status = 'atrasado'
+        elif instance.status == 'atrasado' and instance.delivery_date and instance.delivery_date >= today:
             # Si la fecha de entrega se actualizó al futuro, volver a pendiente
-            instance.status = 'pending'
+            instance.status = 'pendiente'
 
 
 @receiver(pre_save, sender=Order)
@@ -63,7 +66,7 @@ def validate_order_document_type(sender, instance, **kwargs):
         instance.affects_inventory = True
     elif instance.document_type == 'contrato':
         # Verificar que tenga contrato relacionado
-        if not instance.contract:
+        if not instance.contrato:  # Cambio: contract → contrato
             logger.warning(f"Pedido {instance.order_number} de tipo contrato sin contrato relacionado")
 
 
@@ -75,7 +78,7 @@ def create_contract_events(sender, instance, created, **kwargs):
     - Crear eventos para las sesiones fotográficas programadas
     - Crear eventos para las entregas programadas
     """
-    if created and instance.document_type == 'contrato' and instance.contract:
+    if created and instance.document_type == 'contrato' and instance.contrato:
         try:
             # Importar modelo de eventos si existe
             # from apps.operations.models import Event
@@ -134,10 +137,10 @@ def send_order_notifications(sender, instance, created, **kwargs):
     try:
         if created:
             # Notificar creación de pedido
-            if instance.client.email:
+            if instance.cliente.email:  # Cambio: client → cliente
                 subject = f"Nuevo pedido creado - {instance.order_number}"
                 message = f"""
-                Estimado/a {instance.client.get_full_name()},
+                Estimado/a {instance.cliente.obtener_nombre_completo()},
                 
                 Su pedido ha sido creado exitosamente.
                 
@@ -149,14 +152,14 @@ def send_order_notifications(sender, instance, created, **kwargs):
                 
                 Gracias por confiar en nosotros.
                 """
-                # send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [instance.client.email])
+                # send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [instance.cliente.email])
                 logger.info(f"Notificación de creación enviada para pedido {instance.order_number}")
         
         # Notificar pedido atrasado
-        elif instance.status == 'delayed' and instance.client.email:
+        elif instance.status == 'atrasado' and instance.cliente.email:  # Cambio: delayed → atrasado
             subject = f"Pedido atrasado - {instance.order_number}"
             message = f"""
-            Estimado/a {instance.client.get_full_name()},
+            Estimado/a {instance.cliente.obtener_nombre_completo()},
             
             Le informamos que su pedido {instance.order_number} está atrasado.
             La fecha de entrega programada era: {instance.delivery_date}
@@ -165,20 +168,20 @@ def send_order_notifications(sender, instance, created, **kwargs):
             
             Disculpe las molestias ocasionadas.
             """
-            # send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [instance.client.email])
+            # send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [instance.cliente.email])
             logger.info(f"Notificación de atraso enviada para pedido {instance.order_number}")
         
         # Notificar pedido completado
-        elif instance.status == 'completed' and instance.client.email:
+        elif instance.status == 'completado' and instance.cliente.email:  # Cambio: completed → completado
             subject = f"Pedido completado - {instance.order_number}"
             message = f"""
-            Estimado/a {instance.client.get_full_name()},
+            Estimado/a {instance.cliente.obtener_nombre_completo()},
             
             Nos complace informarle que su pedido {instance.order_number} ha sido completado.
             
             Gracias por su preferencia.
             """
-            # send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [instance.client.email])
+            # send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [instance.cliente.email])
             logger.info(f"Notificación de completado enviada para pedido {instance.order_number}")
             
     except Exception as e:
@@ -246,7 +249,7 @@ def manage_inventory_on_order_save(sender, instance, created, **kwargs):
                         except Product.DoesNotExist:
                             logger.warning(f"Producto {item.product_name} no encontrado en inventario")
             
-            elif instance.status == 'cancelled':
+            elif instance.status == 'cancelado':  # Cambio: cancelled → cancelado
                 # Devolver al inventario si se cancela
                 for item in instance.items.all():
                     if item.affects_inventory and item.product_name:
@@ -293,11 +296,11 @@ def check_overdue_orders():
         # Buscar pedidos que deberían estar marcados como atrasados
         overdue_orders = Order.objects.filter(
             delivery_date__lt=today,
-            status__in=['pending', 'in_process']
+            status__in=['pendiente', 'en_proceso']  # Cambio: pending, in_process → pendiente, en_proceso
         )
         
         # Actualizar estado a atrasado
-        updated_count = overdue_orders.update(status='delayed')
+        updated_count = overdue_orders.update(status='atrasado')  # Cambio: delayed → atrasado
         
         logger.info(f"Actualizados {updated_count} pedidos a estado 'atrasado'")
         
@@ -325,9 +328,9 @@ def send_daily_order_summary():
         new_orders = Order.objects.filter(created_at__date=yesterday).count()
         completed_orders = Order.objects.filter(
             updated_at__date=yesterday,
-            status='completed'
+            status='completado'  # Cambio: completed → completado
         ).count()
-        overdue_orders = Order.objects.filter(status='delayed').count()
+        overdue_orders = Order.objects.filter(status='atrasado').count()  # Cambio: delayed → atrasado
         
         # Aquí se podría enviar un email con el resumen
         # o guardar en un log para revisión

@@ -1,3 +1,7 @@
+"""
+Modelos de Agenda - Arte Ideas CRM
+Gestión de eventos, citas y recordatorios
+"""
 from django.db import models
 from django.conf import settings
 
@@ -43,7 +47,7 @@ class Evento(models.Model):
     creado_por = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='eventos_creados', verbose_name='Creado Por')
     asignado_a = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='eventos_asignados', verbose_name='Asignado A')
 
-    cliente = models.ForeignKey('clientes.Cliente', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Cliente')
+    cliente = models.ForeignKey('crm.Cliente', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Cliente')
 
     fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Creación')
     fecha_actualizacion = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualización')
@@ -111,7 +115,7 @@ class Cita(models.Model):
     confirmacion_enviada = models.BooleanField(default=False, verbose_name='Confirmación Enviada')
     fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Creación')
     fecha_actualizacion = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualización')
-    cliente = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE, verbose_name='Cliente')
+    cliente = models.ForeignKey('crm.Cliente', on_delete=models.CASCADE, verbose_name='Cliente')
 
     class Meta:
         verbose_name = 'Cita'

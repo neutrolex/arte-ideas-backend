@@ -1,10 +1,17 @@
+"""
+Modelos de Inventario - Arte Ideas Commerce
+Gestión completa de inventario y stock de productos
+"""
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 from decimal import Decimal
+from apps.core.models import Tenant
 
 
 class BaseInventarioModel(models.Model):
     """Modelo base para todos los productos del inventario"""
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, verbose_name='Estudio Fotográfico')
     nombre_producto = models.CharField(max_length=200, verbose_name="Nombre del Producto")
     stock_disponible = models.PositiveIntegerField(verbose_name="Stock Disponible")
     stock_minimo = models.PositiveIntegerField(verbose_name="Stock Mínimo", default=0)
@@ -14,6 +21,17 @@ class BaseInventarioModel(models.Model):
         validators=[MinValueValidator(Decimal('0.01'))],
         verbose_name="Costo Unitario (S/)"
     )
+    precio_venta = models.DecimalField(
+        max_digits=10, 
+        decimal_places=2, 
+        default=0,
+        verbose_name="Precio de Venta (S/)"
+    )
+    codigo_producto = models.CharField(max_length=50, blank=True, verbose_name="Código del Producto")
+    ubicacion = models.CharField(max_length=100, blank=True, verbose_name="Ubicación en Almacén")
+    proveedor = models.CharField(max_length=200, blank=True, verbose_name="Proveedor")
+    fecha_ultima_compra = models.DateField(null=True, blank=True, verbose_name="Última Compra")
+    is_active = models.BooleanField(default=True, verbose_name="Activo")
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
     

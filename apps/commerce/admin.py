@@ -1,7 +1,23 @@
 """
-Admin configuration for Commerce App - Arte Ideas
-Configuración del panel de administración para modelos de comercio
+Administración del Commerce App - Arte Ideas
+Importaciones centralizadas para compatibilidad
 """
+
+# Importar administraciones de pedidos
+from .pedidos.admin import (
+    OrderAdmin as PedidosOrderAdmin, 
+    OrderItemAdmin as PedidosOrderItemAdmin, 
+    OrderPaymentAdmin, OrderStatusHistoryAdmin
+)
+
+# Importar administraciones de inventario
+from .inventario.admin import (
+    MolduraListonAdmin, MolduraPrearmadaAdmin, VidrioTapaMDFAdmin,
+    PaspartuAdmin, MinilabAdmin, CuadroAdmin, AnuarioAdmin,
+    CorteLaserAdmin, MarcoAccesorioAdmin, HerramientaGeneralAdmin
+)
+
+# Mantener administraciones originales para compatibilidad
 from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
@@ -12,6 +28,10 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 
 from .models import Product, Order, OrderItem
+
+# Alias para compatibilidad
+OrderAdmin = PedidosOrderAdmin
+OrderItemAdmin = PedidosOrderItemAdmin
 
 
 @admin.register(Product)

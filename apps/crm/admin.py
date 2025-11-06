@@ -1,16 +1,25 @@
 """
-Admin configuration for CRM App - Arte Ideas
-Configuración del panel de administración para modelos de CRM
+Admin del CRM App - Arte Ideas
+Importaciones centralizadas de todos los módulos admin
+
+NOTA: Los admins específicos están organizados en:
+- clientes/admin.py - Clientes, historial y contactos
+- agenda/admin.py - Eventos, citas y recordatorios
+- contratos/admin.py - Contratos, cláusulas y pagos
+
+Este archivo mantiene compatibilidad con el admin existente.
 """
 from django.contrib import admin
-from django.utils.html import format_html
-from django.urls import reverse
-from django.utils.safestring import mark_safe
-from django.contrib import messages
-from django.db.models import Count, Q
-from django.utils import timezone
 
-from .models import Cliente, Contrato
+# Importar todos los admins para que se registren automáticamente
+from .clientes import admin as clientes_admin
+from .agenda import admin as agenda_admin
+from .contratos import admin as contratos_admin
+
+# Personalización del admin site para CRM
+admin.site.site_header = "Arte Ideas CRM - Administración (Estructura Reorganizada)"
+admin.site.site_title = "Arte Ideas CRM Admin"
+admin.site.index_title = "Panel de Administración CRM - Arquitectura Modular"
 
 
 @admin.register(Cliente)

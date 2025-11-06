@@ -1,18 +1,18 @@
 """
 URLs del Operations App - Arte Ideas
+Configuración de rutas para operaciones internas y recursos
 """
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
 
 app_name = 'operations'
 
-# Router para ViewSets
-router = DefaultRouter()
-
 urlpatterns = [
-    # API Router
-    path('', include(router.urls)),
+    # Módulo de Producción
+    path('produccion/', include('apps.operations.produccion.urls')),
     
-    # Incluir URLs de la app de producción
-    path('', include('apps.operations.produccion.urls')),
+    # Módulo de Activos
+    path('activos/', include('apps.operations.activos.urls')),
+    
+    # Rutas de compatibilidad
+    path('', include('apps.operations.produccion.urls')),  # Mantener compatibilidad con producción
 ]

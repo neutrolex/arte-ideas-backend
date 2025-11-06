@@ -1,19 +1,21 @@
 """
-Permisos personalizados para el módulo de Pedidos (Commerce)
+Permisos del Commerce App - Arte Ideas
+Permisos centralizados para compatibilidad
 """
+
+# Importar permisos específicos de módulos
+from .pedidos.permissions import OrderPermission, OrderItemPermission, OrderPaymentPermission
+from .inventario.permissions import InventarioPermission
+
+# Mantener permisos originales para compatibilidad
 from rest_framework import permissions
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
-    """
-    Permiso personalizado para que solo los propietarios puedan editar.
-    """
+    """Permiso personalizado para que solo los propietarios puedan editar"""
     def has_object_permission(self, request, view, obj):
-        # Lectura siempre permitida
         if request.method in permissions.SAFE_METHODS:
             return True
-        
-        # Escritura solo para el propietario
         return obj.tenant == request.user.tenant
 
 

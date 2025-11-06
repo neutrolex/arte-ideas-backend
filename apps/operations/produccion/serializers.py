@@ -14,37 +14,37 @@ class OrdenProduccionSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'numero_op', 'pedido', 'pedido_codigo', 'cliente', 'cliente_nombre', 
             'descripcion', 'tipo', 'estado', 'prioridad', 'operario', 
-            'operario_nombre', 'fecha_estimada', 'id_inquilino',
+            'operario_nombre', 'fecha_estimada', 'tenant',
             'creado_en', 'actualizado_en'
         ]
-        read_only_fields = ['id', 'creado_en', 'actualizado_en', 'id_inquilino', 'cliente']  # cliente se autocompleta
+        read_only_fields = ['id', 'creado_en', 'actualizado_en', 'tenant', 'cliente']  # cliente se autocompleta
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         request = self.context.get('request')
-        user_inquilino = self.context.get('user_inquilino')
+        user_tenant = self.context.get('user_tenant')
         
-        # Filtrar campos relacionados por inquilino
-        if user_inquilino:
-            # Solo pedidos del mismo inquilino
-            self.fields['pedido'].queryset = Order.objects.filter(tenant=user_inquilino)
-            # Solo operarios del mismo inquilino
+        # Filtrar campos relacionados por tenant
+        if user_tenant:
+            # Solo pedidos del mismo tenant
+            self.fields['pedido'].queryset = Order.objects.filter(tenant=user_tenant)
+            # Solo operarios del mismo tenant
             self.fields['operario'].queryset = User.objects.filter(
                 role='operario',
-                tenant=user_inquilino
+                tenant=user_tenant
             )
         
-        # Ocultar id_inquilino para usuarios no superusuarios
+        # Ocultar tenant para usuarios no superusuarios
         if request and hasattr(request, 'user'):
             if not request.user.is_superuser:
-                # Remover id_inquilino de los campos visibles
-                if 'id_inquilino' in self.fields:
-                    del self.fields['id_inquilino']
+                # Remover tenant de los campos visibles
+                if 'tenant' in self.fields:
+                    del self.fields['tenant']
     
 
     
     def create(self, validated_data):
-        """Asignar automáticamente cliente e inquilino"""
+        """Asignar automáticamente cliente y tenant"""
         pedido = validated_data.get('pedido')
         request = self.context.get('request')
         
@@ -52,16 +52,16 @@ class OrdenProduccionSerializer(serializers.ModelSerializer):
         if pedido:
             validated_data['cliente'] = pedido.cliente
         
-        # Asignar automáticamente el inquilino del usuario
+        # Asignar automáticamente el tenant del usuario
         if request and hasattr(request.user, 'tenant') and request.user.tenant:
-            validated_data['id_inquilino'] = request.user.tenant
+            validated_data['tenant'] = request.user.tenant
         
         return super().create(validated_data)
     
     def update(self, instance, validated_data):
-        """Prevenir cambio de inquilino en actualizaciones"""
-        # Remover id_inquilino de validated_data para prevenir cambios accidentales
-        validated_data.pop('id_inquilino', None)
+        """Prevenir cambio de tenant en actualizaciones"""
+        # Remover tenant de validated_data para prevenir cambios accidentales
+        validated_data.pop('tenant', None)
         
         # Autocompletar cliente si se cambia el pedido
         pedido = validated_data.get('pedido')
@@ -75,10 +75,10 @@ class OrdenProduccionSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         request = self.context.get('request')
         
-        # Solo mostrar id_inquilino a superusuarios
+        # Solo mostrar tenant a superusuarios
         if request and hasattr(request, 'user'):
-            if not request.user.is_superuser and 'id_inquilino' in data:
-                del data['id_inquilino']
+            if not request.user.is_superuser and 'tenant' in data:
+                del data['tenant']
         
         return data
     
@@ -98,7 +98,7 @@ class OrdenProduccionSerializer(serializers.ModelSerializer):
     
     def validate(self, data):
         # Verificar que todos los campos requeridos estén presentes
-        # Nota: id_inquilino y cliente se asignan automáticamente, no son requeridos en la validación
+        # Nota: tenant y cliente se asignan automáticamente, no son requeridos en la validación
         required_fields = ['numero_op', 'pedido', 'descripcion', 
                           'tipo', 'estado', 'prioridad', 'operario', 
                           'fecha_estimada']
