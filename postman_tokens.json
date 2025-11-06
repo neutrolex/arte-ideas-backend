@@ -1,6 +1,0 @@
-{
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyMzg2MTAyLCJpYXQiOjE3NjIzNTczMDIsImp0aSI6IjZmZmFmNjg3MDIyYTRhZDViOWM3ZDFiMWZkNzhkZGUyIiwidXNlcl9pZCI6IjEifQ.WqqQkd1OWosu6PUrX2ygdmyv_iT67vVCcYdnVRJb4Rs",
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2Mjk2MjEwMiwiaWF0IjoxNzYyMzU3MzAyLCJqdGkiOiJmNjc5ZTk1ZTg4YzQ0OWE4OThhZTAzMzRhODg2Nzk2ZSIsInVzZXJfaWQiOiIxIn0.FQGBFr-obn7HTIfS38JswGdMEJ7f8-hRbboTqNUL2eU",
-  "login_url": "http://localhost:8000/api/core/auth/login/",
-  "totals_summary_url": "http://localhost:8000/api/commerce/orders/totals_summary/"
-}
