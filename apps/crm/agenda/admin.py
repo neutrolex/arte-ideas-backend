@@ -8,13 +8,13 @@ from .models import Evento, Cita, Recordatorio
 class EventoAdmin(admin.ModelAdmin):
     list_display = ['titulo', 'tipo_evento', 'fecha_inicio', 'fecha_fin', 'prioridad', 'estado', 'asignado_a', 'cliente_link']
     list_filter = ['tipo_evento', 'prioridad', 'estado', 'es_todo_el_dia', 'fecha_inicio', 'fecha_creacion']
-    search_fields = ['titulo', 'descripcion', 'ubicacion', 'cliente__nombre_completo']
+    search_fields = ['titulo', 'descripcion', 'ubicacion', 'cliente__nombres', 'cliente__apellidos']
     readonly_fields = ['fecha_creacion', 'fecha_actualizacion', 'duracion_minutos', 'esta_vencido']
 
     def cliente_link(self, obj):
         if obj.cliente:
             url = reverse('admin:clientes_cliente_change', args=[obj.cliente.id])
-            return format_html('<a href="{}">{}</a>', url, obj.cliente.nombre_completo)
+            return format_html('<a href="{}">{}</a>', url, obj.cliente.obtener_nombre_completo())
         return "-"
     cliente_link.short_description = 'Cliente'
 
@@ -23,7 +23,7 @@ class EventoAdmin(admin.ModelAdmin):
 class CitaAdmin(admin.ModelAdmin):
     list_display = ['evento', 'cliente', 'motivo', 'estado_cita', 'valor_oportunidad', 'probabilidad_cierre']
     list_filter = ['motivo', 'estado_cita', 'evento__fecha_inicio', 'recordatorio_enviado', 'confirmacion_enviada']
-    search_fields = ['evento__titulo', 'cliente__nombre_completo', 'contacto_cliente', 'resultado']
+    search_fields = ['evento__titulo', 'cliente__nombres', 'cliente__apellidos', 'contacto_cliente', 'resultado']
     readonly_fields = ['fecha_creacion', 'fecha_actualizacion']
 
 
