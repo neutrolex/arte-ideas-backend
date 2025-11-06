@@ -37,16 +37,15 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'apps.core',
-    'apps.crm',  # paquete contenedor
-    'apps.crm.clientes',
+    'apps.crm',
     'apps.crm.contracts',
     'apps.crm.agenda',
+    'apps.crm.activos',
     'apps.commerce', 
     'apps.operations',
-    'apps.operations.produccion',  # App de producción refactorizada
+    'apps.operations.produccion',
     'apps.finance',
     'apps.analytics',
-    'apps.crm.activos',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

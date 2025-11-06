@@ -6,7 +6,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from apps.core.models import Tenant
-from apps.crm.models import Client, Contract
+from apps.crm.models import Cliente, Contrato
 
 
 class Order(models.Model):
@@ -47,7 +47,7 @@ class Order(models.Model):
     order_number = models.CharField(max_length=50, verbose_name='Número de Pedido')
     
     # Cliente (relación con CRM)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Cliente', related_name='orders')
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, verbose_name='Cliente', related_name='pedidos')
     
     # Tipo de documento y cliente
     document_type = models.CharField(
@@ -103,13 +103,13 @@ class Order(models.Model):
     )
     
     # Relación con contrato (cuando el tipo es 'contrato')
-    contract = models.ForeignKey(
-        Contract, 
+    contrato = models.ForeignKey(
+        Contrato, 
         on_delete=models.SET_NULL, 
         null=True, 
         blank=True,
         verbose_name='Contrato Relacionado',
-        related_name='orders'
+        related_name='pedidos'
     )
     
     # Notas e información adicional
@@ -129,7 +129,7 @@ class Order(models.Model):
         unique_together = ['tenant', 'order_number']
     
     def __str__(self):
-        return f"{self.order_number} - {self.client.get_full_name()} - {self.get_document_type_display()}"
+        return f"{self.order_number} - {self.cliente.obtener_nombre_completo()} - {self.get_document_type_display()}"
     
     def save(self, *args, **kwargs):
         """Guardar con cálculos automáticos"""
@@ -149,8 +149,8 @@ class Order(models.Model):
     def clean(self):
         """Validaciones personalizadas"""
         # Validar que el cliente existe en el mismo tenant
-        if self.client and self.tenant != self.client.tenant:
-            raise ValidationError({'client': 'El cliente debe pertenecer al mismo tenant'})
+        if self.cliente and self.tenant != self.cliente.tenant:
+            raise ValidationError({'cliente': 'El cliente debe pertenecer al mismo tenant'})
         
         # Validar fechas
         if self.start_date and self.delivery_date and self.start_date > self.delivery_date:
@@ -170,10 +170,10 @@ class Order(models.Model):
             raise ValidationError({'paid_amount': 'El monto pagado no puede exceder el total'})
         
         # Validar contrato solo para tipo 'contrato'
-        if self.document_type == 'contrato' and not self.contract:
-            raise ValidationError({'contract': 'Debe seleccionar un contrato para pedidos de tipo contrato'})
-        if self.document_type != 'contrato' and self.contract:
-            raise ValidationError({'contract': 'Solo los pedidos de tipo contrato pueden tener un contrato relacionado'})
+        if self.document_type == 'contrato' and not self.contrato:
+            raise ValidationError({'contrato': 'Debe seleccionar un contrato para pedidos de tipo contrato'})
+        if self.document_type != 'contrato' and self.contrato:
+            raise ValidationError({'contrato': 'Solo los pedidos de tipo contrato pueden tener un contrato relacionado'})
     
     def get_scheduled_sessions(self):
         """Obtener lista de sesiones fotográficas programadas"""

@@ -11,7 +11,7 @@ django.setup()
 
 from django.contrib.auth import get_user_model
 from apps.core.models import Tenant
-from apps.crm.models import Client
+from apps.crm.models import Cliente
 from apps.commerce.models import Order
 from django.utils import timezone
 from datetime import timedelta
@@ -59,37 +59,37 @@ def create_test_data():
         print(f"ℹ️  Usuario administrador ya existía: admin")
     
     # Crear clientes
-    client1, created = Client.objects.get_or_create(
+    cliente1, created = Cliente.objects.get_or_create(
         tenant=tenant,
         dni='12345678',
         defaults={
-            'client_type': 'particular',
-            'first_name': 'Juan',
-            'last_name': 'Pérez',
+            'tipo_cliente': 'particular',
+            'nombres': 'Juan',
+            'apellidos': 'Pérez',
             'email': 'juan@test.com',
-            'phone': '987654321',
-            'address': 'Av. Cliente 123'
+            'telefono': '987654321',
+            'direccion': 'Av. Cliente 123'
         }
     )
     
     if created:
-        print(f"✅ Cliente creado: {client1}")
+        print(f"✅ Cliente creado: {cliente1}")
     
-    client2, created = Client.objects.get_or_create(
+    cliente2, created = Cliente.objects.get_or_create(
         tenant=tenant,
         dni='87654321',
         defaults={
-            'client_type': 'particular',
-            'first_name': 'María',
-            'last_name': 'Gómez',
+            'tipo_cliente': 'particular',
+            'nombres': 'María',
+            'apellidos': 'Gómez',
             'email': 'maria@test.com',
-            'phone': '987654322',
-            'address': 'Av. Cliente 456'
+            'telefono': '987654322',
+            'direccion': 'Av. Cliente 456'
         }
     )
     
     if created:
-        print(f"✅ Cliente creado: {client2}")
+        print(f"✅ Cliente creado: {cliente2}")
     
     # Crear pedidos de prueba
     orders_data = [
@@ -122,7 +122,7 @@ def create_test_data():
             tenant=tenant,
             order_number=order_data['order_number'],
             defaults={
-                'client': client1,
+                'cliente': cliente1,
                 'document_type': 'proforma',
                 'client_type': 'particular',
                 'start_date': timezone.now().date(),

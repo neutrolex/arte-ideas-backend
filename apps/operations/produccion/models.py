@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from apps.core.models import Tenant, User
-from apps.crm.models import Client
+from apps.crm.models import Cliente
 from apps.commerce.models import Order
 
 class OrdenProduccion(models.Model):
@@ -30,7 +30,7 @@ class OrdenProduccion(models.Model):
     
     numero_op = models.CharField(max_length=20, unique=True)
     pedido = models.ForeignKey(Order, on_delete=models.PROTECT, related_name='ordenes')
-    cliente = models.ForeignKey(Client, on_delete=models.PROTECT, related_name='ordenes')
+    cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, related_name='ordenes_produccion')
     descripcion = models.TextField()
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='Pendiente')
@@ -49,7 +49,7 @@ class OrdenProduccion(models.Model):
     def save(self, *args, **kwargs):
         # Autocompletar cliente según pedido seleccionado
         if self.pedido and not self.cliente_id:
-            self.cliente = self.pedido.client
+            self.cliente = self.pedido.cliente
         super().save(*args, **kwargs)
     
     def __str__(self):

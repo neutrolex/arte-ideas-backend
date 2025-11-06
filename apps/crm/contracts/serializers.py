@@ -1,37 +1,38 @@
 from rest_framework import serializers
 
-from .models import Contract
-from apps.crm.clientes.models import Cliente
+from .models import Contrato
+from apps.crm.models import Cliente
 
 
-class ContractSerializer(serializers.ModelSerializer):
-    client = serializers.PrimaryKeyRelatedField(
+class ContratoSerializer(serializers.ModelSerializer):
+    cliente = serializers.PrimaryKeyRelatedField(
         queryset=Cliente.objects.all(), required=False, allow_null=True
     )
+    cliente_nombre = serializers.ReadOnlyField(source='cliente.obtener_nombre_completo')
 
     class Meta:
-        model = Contract
+        model = Contrato
         fields = (
-            'id', 'tenant', 'client', 'client_name', 'title', 'contract_type',
-            'status', 'amount', 'start_date', 'end_date', 'details',
-            'document', 'external_ref'
+            'id', 'tenant', 'cliente', 'cliente_nombre', 'nombre_cliente', 'titulo', 'tipo_contrato',
+            'estado', 'monto', 'fecha_inicio', 'fecha_fin', 'detalles',
+            'documento', 'referencia_externa'
         )
-        read_only_fields = ('tenant', 'document')
+        read_only_fields = ('tenant', 'documento')
 
     def validate(self, attrs):
-        start_date = attrs.get('start_date', getattr(self.instance, 'start_date', None))
-        end_date = attrs.get('end_date', getattr(self.instance, 'end_date', None))
-        amount = attrs.get('amount', getattr(self.instance, 'amount', None))
-        client = attrs.get('client', getattr(self.instance, 'client', None))
-        client_name = attrs.get('client_name', getattr(self.instance, 'client_name', None))
+        fecha_inicio = attrs.get('fecha_inicio', getattr(self.instance, 'fecha_inicio', None))
+        fecha_fin = attrs.get('fecha_fin', getattr(self.instance, 'fecha_fin', None))
+        monto = attrs.get('monto', getattr(self.instance, 'monto', None))
+        cliente = attrs.get('cliente', getattr(self.instance, 'cliente', None))
+        nombre_cliente = attrs.get('nombre_cliente', getattr(self.instance, 'nombre_cliente', None))
 
         errors = {}
-        if end_date and start_date and end_date < start_date:
-            errors['end_date'] = 'La fecha de fin no puede ser menor que la de inicio'
-        if amount is None or amount < 0:
-            errors['amount'] = 'El monto debe ser 0 o mayor'
-        if not client and not client_name:
-            errors['client'] = 'Debe especificarse un cliente (FK) o client_name'
+        if fecha_fin and fecha_inicio and fecha_fin < fecha_inicio:
+            errors['fecha_fin'] = 'La fecha de fin no puede ser menor que la de inicio'
+        if monto is None or monto < 0:
+            errors['monto'] = 'El monto debe ser 0 o mayor'
+        if not cliente and not nombre_cliente:
+            errors['cliente'] = 'Debe especificarse un cliente (FK) o nombre_cliente'
 
         if errors:
             raise serializers.ValidationError(errors)

@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from .models import OrdenProduccion
 from apps.core.models import User, Tenant
-from apps.crm.models import Client
+from apps.crm.models import Cliente
 from apps.commerce.models import Order
 
 class OrdenProduccionSerializer(serializers.ModelSerializer):
-    cliente_nombre = serializers.ReadOnlyField(source='cliente.get_full_name')
+    cliente_nombre = serializers.ReadOnlyField(source='cliente.obtener_nombre_completo')
     operario_nombre = serializers.ReadOnlyField(source='operario.get_full_name')
     pedido_codigo = serializers.ReadOnlyField(source='pedido.order_number')
     
@@ -50,7 +50,7 @@ class OrdenProduccionSerializer(serializers.ModelSerializer):
         
         # Autocompletar cliente según pedido
         if pedido:
-            validated_data['cliente'] = pedido.client
+            validated_data['cliente'] = pedido.cliente
         
         # Asignar automáticamente el inquilino del usuario
         if request and hasattr(request.user, 'tenant') and request.user.tenant:
@@ -66,7 +66,7 @@ class OrdenProduccionSerializer(serializers.ModelSerializer):
         # Autocompletar cliente si se cambia el pedido
         pedido = validated_data.get('pedido')
         if pedido:
-            validated_data['cliente'] = pedido.client
+            validated_data['cliente'] = pedido.cliente
         
         return super().update(instance, validated_data)
     

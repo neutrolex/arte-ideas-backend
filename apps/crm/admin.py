@@ -10,25 +10,25 @@ from django.contrib import messages
 from django.db.models import Count, Q
 from django.utils import timezone
 
-from .models import Client, Contract
+from .models import Cliente, Contrato
 
 
-@admin.register(Client)
-class ClientAdmin(admin.ModelAdmin):
+@admin.register(Cliente)
+class ClienteAdmin(admin.ModelAdmin):
     """Administración de Clientes"""
     
     list_display = [
-        'full_name', 'client_type', 'email', 'phone', 'dni',
-        'company_info', 'school_info', 'created_at_formatted'
+        'nombre_completo', 'tipo_cliente', 'email', 'telefono', 'dni',
+        'info_empresa', 'info_colegio', 'creado_en_formateado'
     ]
     list_filter = [
-        'client_type', 'created_at', 'updated_at'
+        'tipo_cliente', 'creado_en', 'actualizado_en'
     ]
     search_fields = [
-        'first_name', 'last_name', 'email', 'phone', 'dni',
-        'company_name', 'ruc', 'school_level', 'school_grade'
+        'nombres', 'apellidos', 'email', 'telefono', 'dni',
+        'razon_social', 'nivel_educativo', 'grado'
     ]
-    ordering = ['-created_at']
+    ordering = ['-creado_en']
     
     fieldsets = (
         ('Información Personal', {
@@ -145,8 +145,8 @@ class ClientAdmin(admin.ModelAdmin):
     export_clients.short_description = "Exportar clientes"
 
 
-@admin.register(Contract)
-class ContractAdmin(admin.ModelAdmin):
+@admin.register(Contrato)
+class ContratoAdmin(admin.ModelAdmin):
     """Administración de Contratos"""
     
     list_display = [
