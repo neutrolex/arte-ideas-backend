@@ -3,16 +3,14 @@ Modelos de Usuarios - Arte Ideas
 Modelos relacionados con perfiles de usuario y actividades
 """
 from django.db import models
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
+from django.conf import settings
 
 
 class UserProfile(models.Model):
     """
     Perfil extendido del usuario (datos adicionales)
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     
     # Preferencias del usuario
     language = models.CharField(
@@ -63,7 +61,7 @@ class UserActivity(models.Model):
         ('config_change', 'Cambio de configuración'),
     ]
     
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuario')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Usuario')
     tenant = models.ForeignKey('multitenancy.Tenant', on_delete=models.CASCADE, verbose_name='Tenant')
     
     action = models.CharField(max_length=20, choices=ACTION_CHOICES, verbose_name='Acción')

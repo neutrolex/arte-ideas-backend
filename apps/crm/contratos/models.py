@@ -4,6 +4,7 @@ Gestión de contratos de servicios fotográficos
 """
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.conf import settings
 from apps.core.models import Tenant
 
 
@@ -30,7 +31,7 @@ class Contrato(models.Model):
     
     id = models.AutoField(primary_key=True)
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, verbose_name='Estudio Fotográfico')
-    cliente = models.ForeignKey('crm.Cliente', on_delete=models.CASCADE, verbose_name='Cliente', related_name='contratos')
+    cliente = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE, verbose_name='Cliente', related_name='contratos')
     
     # Información del contrato
     numero_contrato = models.CharField(max_length=50, verbose_name='Número de Contrato')
@@ -147,7 +148,7 @@ class PagoContrato(models.Model):
     
     # Usuario que registra el pago
     registrado_por = models.ForeignKey(
-        'core.User', 
+        settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
         verbose_name='Registrado Por'
     )
@@ -174,7 +175,7 @@ class EstadoContrato(models.Model):
     
     # Usuario que realiza el cambio
     cambiado_por = models.ForeignKey(
-        'core.User', 
+        settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
         verbose_name='Cambiado Por'
     )

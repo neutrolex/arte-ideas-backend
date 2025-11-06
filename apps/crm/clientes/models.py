@@ -4,6 +4,7 @@ Gestión de clientes: particulares, colegios y empresas
 """
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.conf import settings
 from apps.core.models import Tenant
 
 
@@ -115,7 +116,7 @@ class HistorialCliente(models.Model):
     
     # Usuario que registra la interacción
     registrado_por = models.ForeignKey(
-        'core.User', 
+        settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
         verbose_name='Registrado Por'
     )

@@ -51,7 +51,7 @@ class ContratoAdmin(admin.ModelAdmin):
         'cliente__razon_social'
     ]
     ordering = ['-creado_en']
-    inlines = [ClausulaContratoInline, PagoContratoInline, EstadoContratoInline]
+    # inlines = [ClausulaContratoInline, PagoContratoInline, EstadoContratoInline]
     
     fieldsets = (
         ('Información Básica', {

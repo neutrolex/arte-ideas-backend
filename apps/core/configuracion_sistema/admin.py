@@ -30,4 +30,4 @@ class SystemConfigurationAdmin(admin.ModelAdmin):
     
     def has_module_permission(self, request):
         """Solo super admin puede ver configuraciones del sistema"""
-        return request.user.role == 'super_admin'
+        return request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == 'super_admin'

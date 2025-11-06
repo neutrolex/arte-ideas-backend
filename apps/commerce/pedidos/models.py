@@ -5,6 +5,7 @@ Gestión de pedidos, órdenes y operaciones comerciales
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.conf import settings
 from apps.core.models import Tenant
 from apps.crm.models import Cliente, Contrato
 
@@ -141,7 +142,7 @@ class Order(models.Model):
     
     # Usuario que crea el pedido
     created_by = models.ForeignKey(
-        'core.User',
+        settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -398,7 +399,7 @@ class OrderPayment(models.Model):
     
     # Usuario que registra el pago
     registered_by = models.ForeignKey(
-        'core.User',
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         verbose_name='Registrado Por'
     )
@@ -437,7 +438,7 @@ class OrderStatusHistory(models.Model):
     
     # Usuario que realiza el cambio
     changed_by = models.ForeignKey(
-        'core.User',
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         verbose_name='Cambiado Por'
     )

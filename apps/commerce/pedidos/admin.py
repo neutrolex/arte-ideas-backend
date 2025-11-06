@@ -98,7 +98,7 @@ class OrderAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         })
     )
-    inlines = [OrderItemInline, OrderPaymentInline]
+    # inlines = [OrderItemInline, OrderPaymentInline]
     date_hierarchy = 'delivery_date'
     
     def cliente_nombre(self, obj):

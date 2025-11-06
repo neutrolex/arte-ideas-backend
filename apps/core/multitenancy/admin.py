@@ -36,19 +36,19 @@ class TenantAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         """Filtrar tenants según permisos"""
         qs = super().get_queryset(request)
-        if request.user.role == 'super_admin':
+        if request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == 'super_admin':
             return qs
-        elif request.user.tenant:
+        elif request.user.is_authenticated and hasattr(request.user, 'tenant') and request.user.tenant:
             return qs.filter(id=request.user.tenant.id)
         return qs.none()
     
     def has_add_permission(self, request):
         """Solo super admin puede crear tenants"""
-        return request.user.role == 'super_admin'
+        return request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == 'super_admin'
     
     def has_delete_permission(self, request, obj=None):
         """Solo super admin puede eliminar tenants"""
-        return request.user.role == 'super_admin'
+        return request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == 'super_admin'
 
 
 @admin.register(TenantConfiguration)
@@ -80,8 +80,8 @@ class TenantConfigurationAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         """Filtrar configuraciones según usuario"""
         qs = super().get_queryset(request)
-        if request.user.role == 'super_admin':
+        if request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == 'super_admin':
             return qs
-        elif request.user.tenant:
+        elif request.user.is_authenticated and hasattr(request.user, 'tenant') and request.user.tenant:
             return qs.filter(tenant=request.user.tenant)
         return qs.none()

@@ -35,9 +35,9 @@ class UserAdmin(BaseUserAdmin):
     def get_queryset(self, request):
         """Filtrar usuarios según permisos"""
         qs = super().get_queryset(request)
-        if request.user.role == 'super_admin':
+        if request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == 'super_admin':
             return qs
-        elif request.user.tenant:
+        elif request.user.is_authenticated and hasattr(request.user, 'tenant') and request.user.tenant:
             return qs.filter(tenant=request.user.tenant)
         return qs.none()
 
@@ -71,8 +71,8 @@ class RolePermissionAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         """Filtrar permisos según usuario"""
         qs = super().get_queryset(request)
-        if request.user.role == 'super_admin':
+        if request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == 'super_admin':
             return qs
-        elif request.user.tenant:
+        elif request.user.is_authenticated and hasattr(request.user, 'tenant') and request.user.tenant:
             return qs.filter(tenant=request.user.tenant)
         return qs.none()

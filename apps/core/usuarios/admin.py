@@ -51,9 +51,9 @@ class UserActivityAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         """Filtrar actividades según usuario"""
         qs = super().get_queryset(request)
-        if request.user.role == 'super_admin':
+        if request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == 'super_admin':
             return qs
-        elif request.user.tenant:
+        elif request.user.is_authenticated and hasattr(request.user, 'tenant') and request.user.tenant:
             return qs.filter(tenant=request.user.tenant)
         return qs.none()
     

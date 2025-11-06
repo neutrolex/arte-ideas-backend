@@ -9,12 +9,12 @@ from datetime import date, timedelta
 from .models import OrdenProduccion
 from .serializers import OrdenProduccionSerializer
 from .filters import OrdenProduccionFilter
-from apps.core.permissions import IsSameTenant
+# from apps.core.permissions import IsSameTenant  # Comentado temporalmente
 
 class OrdenProduccionViewSet(viewsets.ModelViewSet):
     """ViewSet para gestión de órdenes de producción"""
     serializer_class = OrdenProduccionSerializer
-    permission_classes = [IsAuthenticated, IsSameTenant]
+    permission_classes = [IsAuthenticated]  # IsSameTenant comentado temporalmente
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = OrdenProduccionFilter
     search_fields = ['numero_op', 'cliente__first_name', 'cliente__last_name', 'pedido__order_number', 'descripcion']

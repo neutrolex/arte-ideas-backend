@@ -113,7 +113,7 @@ DATABASES = {
 # }
 
 # Custom User Model
-AUTH_USER_MODEL = 'core.User'
+AUTH_USER_MODEL = 'autenticacion.User'
 
 # REST Framework Configuration
 REST_FRAMEWORK = {

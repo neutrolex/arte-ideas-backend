@@ -1,8 +1,8 @@
 from django.contrib import admin
 from .models import OrdenProduccion
 from apps.core.models import User, Tenant
-from apps.crm.models import Cliente
-from apps.commerce.models import Order
+from apps.crm.clientes.models import Cliente
+from apps.commerce.pedidos.models import Order
 
 @admin.register(OrdenProduccion)
 class OrdenProduccionAdmin(admin.ModelAdmin):

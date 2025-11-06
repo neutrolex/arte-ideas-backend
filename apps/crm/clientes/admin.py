@@ -37,7 +37,7 @@ class ClienteAdmin(admin.ModelAdmin):
         'razon_social', 'grado', 'seccion'
     ]
     ordering = ['-creado_en']
-    inlines = [ContactoClienteInline, HistorialClienteInline]
+    # inlines = [ContactoClienteInline, HistorialClienteInline]
     
     fieldsets = (
         ('Información Básica', {

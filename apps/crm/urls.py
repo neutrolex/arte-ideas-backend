@@ -28,5 +28,5 @@ urlpatterns = [
     path('contratos/', include('apps.crm.contratos.urls')),
     
     # Compatibilidad con rutas anteriores
-    path('contracts/', include('apps.crm.contracts.urls')),  # Mantener por compatibilidad
+    path('contracts/', include('apps.crm.contratos.urls')),  # Mantener por compatibilidad
 ]

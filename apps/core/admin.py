@@ -28,7 +28,7 @@ admin.site.index_title = "Panel de Administración - Arquitectura Modular"
 # Acción personalizada para cambiar contexto de tenant (solo super admin)
 def switch_tenant_context(modeladmin, request, queryset):
     """Acción para cambiar contexto de tenant"""
-    if not hasattr(request.user, 'role') or request.user.role != 'super_admin':
+    if not request.user.is_authenticated or not hasattr(request.user, 'role') or request.user.role != 'super_admin':
         messages.error(request, "Solo super admin puede cambiar contexto de tenant")
         return
     
