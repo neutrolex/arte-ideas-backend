@@ -1,13 +1,13 @@
 from rest_framework import serializers
 from .models import OrdenProduccion
-from django.contrib.auth import get_user_model
-from base.models import Cliente
-from pedidos.models import Pedido
+from apps.core.models import User, Tenant
+from apps.crm.models import Client
+from apps.commerce.models import Order
 
 class OrdenProduccionSerializer(serializers.ModelSerializer):
-    cliente_nombre = serializers.ReadOnlyField(source='cliente.nombre')
-    operario_nombre = serializers.ReadOnlyField(source='operario.nombre_completo')
-    pedido_codigo = serializers.ReadOnlyField(source='pedido.codigo')
+    cliente_nombre = serializers.ReadOnlyField(source='cliente.get_full_name')
+    operario_nombre = serializers.ReadOnlyField(source='operario.get_full_name')
+    pedido_codigo = serializers.ReadOnlyField(source='pedido.order_number')
     
     class Meta:
         model = OrdenProduccion
@@ -21,18 +21,17 @@ class OrdenProduccionSerializer(serializers.ModelSerializer):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        User = get_user_model()
         request = self.context.get('request')
         user_inquilino = self.context.get('user_inquilino')
         
         # Filtrar campos relacionados por inquilino
         if user_inquilino:
             # Solo pedidos del mismo inquilino
-            self.fields['pedido'].queryset = Pedido.objects.filter(id_inquilino=user_inquilino)
+            self.fields['pedido'].queryset = Order.objects.filter(tenant=user_inquilino)
             # Solo operarios del mismo inquilino
             self.fields['operario'].queryset = User.objects.filter(
-                rol='Operario',
-                id_inquilino=user_inquilino
+                role='operario',
+                tenant=user_inquilino
             )
         
         # Ocultar id_inquilino para usuarios no superusuarios
@@ -51,11 +50,11 @@ class OrdenProduccionSerializer(serializers.ModelSerializer):
         
         # Autocompletar cliente según pedido
         if pedido:
-            validated_data['cliente'] = pedido.cliente
+            validated_data['cliente'] = pedido.client
         
         # Asignar automáticamente el inquilino del usuario
-        if request and hasattr(request.user, 'id_inquilino') and request.user.id_inquilino:
-            validated_data['id_inquilino'] = request.user.id_inquilino
+        if request and hasattr(request.user, 'tenant') and request.user.tenant:
+            validated_data['id_inquilino'] = request.user.tenant
         
         return super().create(validated_data)
     
@@ -67,7 +66,7 @@ class OrdenProduccionSerializer(serializers.ModelSerializer):
         # Autocompletar cliente si se cambia el pedido
         pedido = validated_data.get('pedido')
         if pedido:
-            validated_data['cliente'] = pedido.cliente
+            validated_data['cliente'] = pedido.client
         
         return super().update(instance, validated_data)
     
@@ -93,7 +92,7 @@ class OrdenProduccionSerializer(serializers.ModelSerializer):
     
     def validate_operario(self, value):
         # Verificar que el operario tenga el rol correcto
-        if value and value.rol != 'Operario':
+        if value and value.role != 'operario':
             raise serializers.ValidationError("El usuario seleccionado no tiene el rol de Operario.")
         return value
     

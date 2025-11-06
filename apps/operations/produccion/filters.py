@@ -18,7 +18,8 @@ class OrdenProduccionFilter(django_filters.FilterSet):
     def filter_search(self, queryset, name, value):
         return queryset.filter(
             models.Q(numero_op__icontains=value) |
-            models.Q(pedido__codigo__icontains=value) |
-            models.Q(cliente__nombre__icontains=value) |
+            models.Q(pedido__order_number__icontains=value) |
+            models.Q(cliente__first_name__icontains=value) |
+            models.Q(cliente__last_name__icontains=value) |
             models.Q(descripcion__icontains=value)
         )

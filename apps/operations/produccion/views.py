@@ -12,7 +12,7 @@ class OrdenProduccionViewSet(viewsets.ModelViewSet):
     serializer_class = OrdenProduccionSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = OrdenProduccionFilter
-    search_fields = ['numero_op', 'cliente__nombre', 'pedido__codigo', 'descripcion']
+    search_fields = ['numero_op', 'cliente__first_name', 'cliente__last_name', 'pedido__order_number', 'descripcion']
     permission_classes = [IsSameInmobiliaria]
     
     def get_queryset(self):
@@ -24,9 +24,9 @@ class OrdenProduccionViewSet(viewsets.ModelViewSet):
             return OrdenProduccion.objects.all().select_related('pedido', 'cliente', 'operario', 'id_inquilino')
         
         # Usuarios normales solo ven de su inquilino
-        if hasattr(user, 'id_inquilino') and user.id_inquilino:
+        if hasattr(user, 'tenant') and user.tenant:
             return OrdenProduccion.objects.filter(
-                id_inquilino=user.id_inquilino
+                id_inquilino=user.tenant
             ).select_related('pedido', 'cliente', 'operario')
         
         return OrdenProduccion.objects.none()
@@ -36,8 +36,8 @@ class OrdenProduccionViewSet(viewsets.ModelViewSet):
         context = super().get_serializer_context()
         context['request'] = self.request
         
-        if hasattr(self.request.user, 'id_inquilino'):
-            context['user_inquilino'] = self.request.user.id_inquilino
+        if hasattr(self.request.user, 'tenant'):
+            context['user_inquilino'] = self.request.user.tenant
         
         return context
     
@@ -66,8 +66,8 @@ class OrdenProduccionViewSet(viewsets.ModelViewSet):
                 queryset = OrdenProduccion.objects.all()
         else:
             # Usuarios normales solo ven estadísticas de su inquilino
-            if hasattr(user, 'id_inquilino') and user.id_inquilino:
-                queryset = OrdenProduccion.objects.filter(id_inquilino=user.id_inquilino)
+            if hasattr(user, 'tenant') and user.tenant:
+                queryset = OrdenProduccion.objects.filter(id_inquilino=user.tenant)
             else:
                 return Response({'error': 'Usuario no asociado a un inquilino'}, status=status.HTTP_400_BAD_REQUEST)
         
