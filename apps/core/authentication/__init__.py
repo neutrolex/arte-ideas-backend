@@ -1,1 +1,0 @@
-# Módulo de Autenticación - Arte Ideas Core

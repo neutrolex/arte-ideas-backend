@@ -1,6 +1,6 @@
 """
 URLs del Core App - Arte Ideas
-Estructura modular organizada por subcarpetas
+Estructura modular reorganizada según buenas prácticas
 """
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
@@ -18,12 +18,12 @@ urlpatterns = [
     # Health Check
     path('health/', CoreHealthCheckView.as_view(), name='health_check'),
     
-    # Módulo Autenticación
-    path('auth/', include('apps.core.authentication.urls')),
+    # Módulo de Autenticación (login, logout, permisos)
+    path('auth/', include('apps.core.autenticacion.urls')),
     
-    # Módulo Mi Perfil
-    path('profile/', include('apps.core.profile.urls')),
+    # Módulo de Usuarios (perfiles, actividades)
+    path('users/', include('apps.core.usuarios.urls')),
     
-    # Módulo Configuración
-    path('config/', include('apps.core.configuration.urls')),
+    # Módulo de Configuración del Sistema (administración, usuarios, negocio)
+    path('config/', include('apps.core.configuracion_sistema.urls')),
 ]

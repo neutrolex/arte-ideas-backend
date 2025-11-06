@@ -15,9 +15,12 @@ class CoreHealthCheckView(APIView):
         """Health check del sistema"""
         return Response({
             'status': 'ok',
-            'message': 'Arte Ideas Core App funcionando correctamente',
+            'message': 'Arte Ideas Core App funcionando correctamente - Estructura Reorganizada',
             'modules': {
-                'profile': 'Mi Perfil - Gestión personal del usuario',
-                'configuration': 'Configuración - Gestión de usuarios, negocio y permisos'
-            }
+                'autenticacion': 'Autenticación - Login, logout, permisos y roles',
+                'usuarios': 'Usuarios - Perfiles, actividades y gestión personal',
+                'configuracion_sistema': 'Configuración - Administración, usuarios y negocio',
+                'multitenancy': 'Multi-tenancy - Gestión de tenants y configuraciones específicas'
+            },
+            'architecture': 'Modular - Separación clara de responsabilidades'
         })
