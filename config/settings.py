@@ -43,6 +43,7 @@ LOCAL_APPS = [
     'apps.crm.agenda',
     'apps.commerce', 
     'apps.operations',
+    'apps.operations.produccion',  # App de producción refactorizada
     'apps.finance',
     'apps.analytics',
 ]
