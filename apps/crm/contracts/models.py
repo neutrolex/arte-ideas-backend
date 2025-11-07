@@ -49,7 +49,7 @@ class Contract(models.Model):
     external_ref = models.CharField(max_length=64, blank=True)
 
     class Meta:
-        db_table = "crm_contract"
+        db_table = 'unique_contracts_module_table'
         indexes = [
             models.Index(fields=["tenant", "status"]),
             models.Index(fields=["tenant", "contract_type"]),
