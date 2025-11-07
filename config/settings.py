@@ -43,8 +43,10 @@ LOCAL_APPS = [
     'apps.crm.agenda',
     'apps.commerce', 
     'apps.operations',
+    'apps.operations.produccion',  # App de producción refactorizada
     'apps.finance',
     'apps.analytics',
+    'apps.crm.activos',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

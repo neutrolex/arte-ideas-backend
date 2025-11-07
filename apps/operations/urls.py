@@ -12,4 +12,7 @@ router = DefaultRouter()
 urlpatterns = [
     # API Router
     path('', include(router.urls)),
+    
+    # Incluir URLs de la app de producción
+    path('', include('apps.operations.produccion.urls')),
 ]
