@@ -1,15 +1,10 @@
-"""
-URLs del Finance App - Arte Ideas
-"""
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+# Las vistas se importan automáticamente a través del índice views.py
 
 app_name = 'finance'
 
-# Router para ViewSets
-router = DefaultRouter()
-
 urlpatterns = [
-    # API Router
-    path('', include(router.urls)),
+    # Incluye el archivo de URLs de la subcarpeta 'gastos/'
+    # Se recomienda que el archivo dentro de gastos se llame urls.py 
+    path('', include('apps.finance.gastos.urls')), 
 ]

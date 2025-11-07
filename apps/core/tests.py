@@ -98,7 +98,7 @@ class AuthenticationAPITest(APITestCase):
     
     def test_login(self):
         """Test login JWT"""
-        url = reverse('core:token_obtain_pair')
+        url = reverse('core:authentication:login')
         data = {
             'username': 'testuser',
             'password': 'testpass123'

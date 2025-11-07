@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo - Próximos Eventos (Agenda CRM)</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 2rem; }
+    h1 { margin-bottom: 0.25rem; }
+    .meta { color: #666; margin-bottom: 1rem; }
+    ul { list-style: none; padding: 0; }
+    li { border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+    .tag { display: inline-block; font-size: 12px; padding: 2px 6px; border-radius: 6px; background: #eef; color: #224; margin-left: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Próximos Eventos</h1>
+  <div class="meta">
+    Fuente: <code>/api/crm/agenda/proximos-eventos-demo/</code>
+  </div>
+
+  <ul id="eventos"></ul>
+
+  <script>
+    async function cargarEventos() {
+      try {
+        const res = await fetch('/api/crm/agenda/proximos-eventos-demo/');
+        const data = await res.json();
+        const list = document.getElementById('eventos');
+        list.innerHTML = '';
+        data.eventos.forEach(ev => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <strong>${ev.titulo}</strong>
+            <span class="tag">${ev.tipo}</span><br/>
+            <small>${ev.fecha} — ${ev.hora}</small>
+          `;
+          list.appendChild(li);
+        });
+      } catch (e) {
+        document.getElementById('eventos').innerHTML = '<li>Error cargando eventos</li>';
+        console.error(e);
+      }
+    }
+    cargarEventos();
+  </script>
+</body>
+</html>

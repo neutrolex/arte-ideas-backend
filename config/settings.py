@@ -32,26 +32,33 @@ THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'django_filters',
 ]
 
 LOCAL_APPS = [
     'apps.core',
-    'apps.crm',
+    'apps.crm',  # paquete contenedor
+    'apps.crm.clientes',
+    'apps.crm.contracts',
+    'apps.crm.agenda',
     'apps.commerce', 
     'apps.operations',
+    'apps.operations.produccion',  # App de producción refactorizada
     'apps.finance',
     'apps.analytics',
+    'apps.crm.activos',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'apps.core.middleware.TenantMiddleware', 
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
